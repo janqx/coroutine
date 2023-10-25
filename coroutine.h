@@ -33,4 +33,10 @@ int coroutine_state(scheduler_t *sched, int id);
 /* get current running coroutine id */
 int coroutine_current(scheduler_t *sched);
 
+/* get number of coroutines */
+int coroutine_count(scheduler_t *sched);
+
+/* destroy coroutine by id */
+void coroutine_destroy(scheduler_t *sched, int id);
+
 #endif /* __COROUTINE_H__ */

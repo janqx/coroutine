@@ -17,7 +17,7 @@ void task(scheduler_t *sched, void *arg) {
   printf("task(%d) end\n", coroutine_current(sched));
 }
 
-#define NUM_CO 16
+#define NUM_CO 1024
  
 int main(int argc, char const *argv[]) {
   struct args args_list[NUM_CO];
@@ -29,22 +29,18 @@ int main(int argc, char const *argv[]) {
     co_list[i] = coroutine_new(sched, task, &args_list[i]);
   }
 
-  for(int i = 0;; i++) {
-    int flag = 1;
+  for(int i = 0; coroutine_count(sched) > 0; i++) {
     for(int j = 0; j < NUM_CO; j++) {
       if(coroutine_state(sched, co_list[j])) {
-        flag = 0;
         args_list[j].value = i;
         coroutine_resume(sched, co_list[j]);
       }
-    }
-    if(flag) {
-      break;
     }
   }
 
   scheduler_close(sched);
 
   printf("\nsafe exit.\n");
+  getchar();
   return 0;
 }
